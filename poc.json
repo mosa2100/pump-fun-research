@@ -1,0 +1,9 @@
+{
+  "definitions": {
+    "test": {
+      "properties": {
+        "<img src=x onerror=alert('XSS')>": "test"
+      }
+    }
+  }
+}
