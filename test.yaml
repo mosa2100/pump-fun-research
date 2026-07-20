@@ -1,18 +1,89 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  title: File Upload API
-  version: "1.0"
+  title: "🖥️ مشغل أكواد HTML التفاعلي"
+  description: |
+    هذه الخدمة تتيح لك:
+    1. إرسال كود HTML (عبر واجهة الـ API أو عبر صفحة ويب).
+    2. يقوم الخادم بتنفيذ الكود وعرض النتيجة في متصفحك.
+    3. توفر صفحة رئيسية تفاعلية تحتوي على محرر نصوص وزر "تشغيل".
+  version: "2.0.0"
+host: "localhost:3000"
+schemes:
+  - "http"
+consumes:
+  - "application/json"
+produces:
+  - "text/html"
+  - "application/json"
 
 paths:
-  /upload:
-    post:
-      consumes:
-        - multipart/form-data
-      parameters:
-        - name: file
-          in: formData
-          type: file
-          required: true
+  /:
+    get:
+      summary: "الصفحة الرئيسية (واجهة المستخدم)"
+      description: "تعرض صفحة ويب تحتوي على محرر HTML وزر تشغيل. عند الضغط على الزر، يُرسل الكود إلى الخادم ويعرض النتيجة."
       responses:
-        200:
-          description: File uploaded
+        "200":
+          description: "صفحة HTML تفاعلية تحتوي على محرر ومشغل"
+          schema:
+            type: "string"
+            example: "<html>...</html>"
+
+  /run-html:
+    post:
+      summary: "تنفيذ كود HTML"
+      description: "يرسل المستخدم كود HTML (نصي) في جسم الطلب، فيقوم الخادم بتنفيذه وإرجاع النتيجة معروضة داخل إطار (iframe) أو رابط لمشاهدتها."
+      parameters:
+        - name: "body"
+          in: "body"
+          required: true
+          description: "كود HTML الذي تريد تشغيله"
+          schema:
+            type: "object"
+            required:
+              - "html_code"
+            properties:
+              html_code:
+                type: "string"
+                description: "نص كود HTML كاملاً (مثل: <h1>مرحباً</h1>)"
+                example: "<html><body><h1 style='color:blue;'>أهلاً بك في عالم البرمجة!</h1><p>تم تنفيذ الكود بنجاح.</p></body></html>"
+      responses:
+        "200":
+          description: "تم تنفيذ الكود بنجاح، ويعيد الخادم صفحة HTML معروضة داخل iframe أو رابط مباشر"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                example: "نجاح"
+              rendered_html:
+                type: "string"
+                description: "نفس الكود المُرسَل مع إضافة هيكل لعرضه في iframe"
+                example: "<html>...</html>"
+              preview_url:
+                type: "string"
+                description: "رابط لعرض النتيجة في صفحة منفصلة"
+                example: "http://localhost:3000/preview/abc123"
+        "400":
+          description: "الطلب غير صحيح (لم يتم إرسال كود HTML)"
+          schema:
+            type: "object"
+            properties:
+              error:
+                type: "string"
+                example: "لم ترسل أي كود HTML"
+
+  /preview/{token}:
+    get:
+      summary: "عرض نتيجة التنفيذ"
+      description: "رابط مؤقت لعرض نتيجة كود HTML المنفذ في صفحة نظيفة"
+      parameters:
+        - name: "token"
+          in: "path"
+          required: true
+          type: "string"
+          description: "المعرف الفريد الذي تم إنشاؤه عند تنفيذ الكود"
+      responses:
+        "200":
+          description: "عرض صفحة HTML المنفذة"
+        "404":
+          description: "المعرف غير موجود أو انتهت صلاحيته"
