@@ -1,54 +1,18 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
-  title: "خدمة رفع الملفات"
-  description: "هذه الخدمة تسمح برفع ملف وعرض محتواه أو إنشاء رابط لتحميله"
-  version: "1.0.0"
-host: "localhost:3000"
-schemes:
-  - "http"
-consumes:
-  - "multipart/form-data"
-produces:
-  - "application/json"
+  title: File Upload API
+  version: "1.0"
+
 paths:
   /upload:
     post:
-      summary: "رفع ملف"
-      description: "يقوم المستخدم برفع ملف، ويقوم النظام بحفظه وعرض محتواه أو إرجاع رابط الوصول إليه"
+      consumes:
+        - multipart/form-data
       parameters:
-        - name: "file"
-          in: "formData"
-          description: "الملف المطلوب رفعه"
+        - name: file
+          in: formData
+          type: file
           required: true
-          type: "file"
       responses:
-        "200":
-          description: "تم رفع الملف بنجاح"
-          schema:
-            type: "object"
-            properties:
-              message:
-                type: "string"
-                example: "تم رفع الملف بنجاح"
-              fileUrl:
-                type: "string"
-                example: "http://localhost:3000/files/example.txt"
-              fileContent:
-                type: "string"
-                example: "محتوى الملف هنا..."
-              fileName:
-                type: "string"
-                example: "example.txt"
-  /files/{fileName}:
-    get:
-      summary: "عرض أو تحميل ملف"
-      description: "يقوم بجلب الملف المخزن وعرض محتواه في المتصفح أو تحميله"
-      parameters:
-        - name: "fileName"
-          in: "path"
-          required: true
-          type: "string"
-          description: "اسم الملف المخزن"
-      responses:
-        "200":
-          description: "يتم عرض الملف أو محتواه"
+        200:
+          description: File uploaded
