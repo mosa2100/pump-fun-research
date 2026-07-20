@@ -2,7 +2,9 @@ swagger: '2.0'
 info:
   title: "اختبار ثغرة XSS"
   version: "1.0.0"
+paths: {}  # هذا مطلوب لـ Swagger 2.0
 definitions:
   test:
     properties:
-      "<img src=x onerror=alert('XSS')>": "test"
+      "<img src=x onerror=alert('XSS')>":
+        type: "string"
